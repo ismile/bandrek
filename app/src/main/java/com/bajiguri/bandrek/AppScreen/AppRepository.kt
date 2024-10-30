@@ -1,7 +1,10 @@
 package com.bajiguri.bandrek.AppScreen
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import com.bajiguri.bandrek.utils.getBitmapFromDrawable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
