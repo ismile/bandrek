@@ -19,7 +19,7 @@ class AppViewModel @Inject constructor(
 
     fun loadApps() {
         viewModelScope.launch {
-            _appList.value = repository.getInstalledApps()
+            _appList.value = repository.getInstalledApps().sortedBy { it.name }
         }
     }
 

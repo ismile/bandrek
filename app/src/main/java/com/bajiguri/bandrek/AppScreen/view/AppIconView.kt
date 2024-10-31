@@ -6,16 +6,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import com.bajiguri.bandrek.AppScreen.AppInfo
 import com.bajiguri.bandrek.AppScreen.startApp
@@ -30,7 +33,6 @@ fun AppIconView(
     it: AppInfo,
     showText: Boolean = true
 ) {
-    it.iconBitmap = rememberAsyncImagePainter(it.icon)
     var context = LocalContext.current
 
     Column(
@@ -45,17 +47,15 @@ fun AppIconView(
         Surface(
             modifier = Modifier
                 .size(iconWidth, iconWidth)
-//                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(8.dp))
         ) {
-            it.iconBitmap?.let { icon ->
-                Image(
-                    painter = icon,
-                    contentDescription = it.name,
-                    modifier = Modifier
-                        .size(iconWidth, iconWidth)
-                        .clip(RoundedCornerShape(4.dp))
-                )
-            }
+            AsyncImage(
+                model = it.drawable,
+                contentDescription = it.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(iconWidth, iconWidth)
+            )
         }
         Text(
             text = it.name ?: "",
