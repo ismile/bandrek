@@ -24,29 +24,25 @@ import com.bajiguri.bandrek.AppScreen.view.AppIconView
 import com.bajiguri.bandrek.AppScreen.view.AppSearchView
 
 @Composable
-fun AppScreen(modifier: Modifier = Modifier, viewModel: AppViewModel = hiltViewModel()) {
+fun AppScreen(
+    modifier: Modifier = Modifier,
+    viewModel: AppViewModel = hiltViewModel(),
+    searchText: String
+) {
     val appList by viewModel.appList.collectAsState()
-    var searchText by remember { mutableStateOf("") }
-
-    Scaffold { padding ->
-        Column(
-            modifier
-                .padding(padding)
-                .fillMaxSize()) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 80.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                items(appList.filter {
-                    it.name.orEmpty().contains(searchText, ignoreCase = true)
-                }, key = { it.name.orEmpty() + "_" + it.activityName + "_" + it.packageName }) {
-                    AppIconView(it = it)
-                }
+    Column(
+        modifier
+            .fillMaxSize()
+    ) {
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 80.dp),
+            modifier = Modifier.weight(1f)
+        ) {
+            items(appList.filter {
+                it.name.orEmpty().contains(searchText, ignoreCase = true)
+            }, key = { it.name.orEmpty() + "_" + it.activityName + "_" + it.packageName }) {
+                AppIconView(it = it)
             }
-            AppSearchView(
-                value = searchText,
-                onValueChange = { v -> searchText = v }
-            )
         }
     }
 }

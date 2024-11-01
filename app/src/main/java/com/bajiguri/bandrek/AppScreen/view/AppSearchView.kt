@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -42,7 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 
-@OptIn(FlowPreview::class)
+@OptIn(FlowPreview::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AppSearchView(
     modifier: Modifier = Modifier,
@@ -67,7 +68,7 @@ fun AppSearchView(
     ) {
         OutlinedTextField(
             value = textState,
-            onValueChange = {textState = it},
+            onValueChange = { textState = it },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -86,37 +87,25 @@ fun AppSearchView(
                     )
                 }
             },
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor= Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                containerColor=MaterialTheme.colorScheme.surfaceContainer,
             ),
-            shape = RoundedCornerShape(40.dp),
+            shape = RoundedCornerShape(30.dp),
             placeholder = {
                 Text(stringResource(R.string.search))
             },
             modifier = modifier
                 .fillMaxWidth()
-                .heightIn(min = 56.dp)
+                .border(0.dp, Color.Transparent)
         )
     }
 
 }
 
 @Composable
-@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+@Preview(showBackground = true)
 fun PreviewAppSearchView() {
-    Scaffold { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(Color.Cyan)
-            ) {
-
-            }
-            AppSearchView()
-        }
-    }
-
-
+    AppSearchView(value = "adasd")
 }
