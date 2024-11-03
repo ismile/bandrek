@@ -33,22 +33,35 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.Navigation
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.bajiguri.bandrek.AppScreen.view.AppSearchView
 import com.bajiguri.bandrek.icon.Component
 import com.bajiguri.bandrek.icon.Gamepad2
 import com.bajiguri.bandrek.icon.House
 import com.bajiguri.bandrek.icon.Settings
 
-val items = listOf("Home", "Platform", "App", "Setting")
-val selectedIcons = listOf(House, Gamepad2, Component, Settings)
+data class TopLevelRoute(val name: String, val route: String, val icon: ImageVector)
+val topLevelRoutes = listOf(
+    TopLevelRoute("Home", "platform_screen", House),
+    TopLevelRoute("Platform", "platform_screen", Gamepad2),
+    TopLevelRoute("App", "app_screen", Component),
+    TopLevelRoute("Setting", "platform_screen", Settings)
+)
 
 @Composable
-@Preview(showBackground = true)
-fun NavigationView(searchedText: String = "", onSearchTextChange: (String) -> Unit = {}) {
+fun NavigationView(searchedText: String = "",
+                   onSearchTextChange: (String) -> Unit = {},
+                   navHostController: NavHostController) {
     var selectedItem by remember { mutableIntStateOf(0) }
+    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
     Column(
         modifier =
         Modifier
@@ -63,16 +76,31 @@ fun NavigationView(searchedText: String = "", onSearchTextChange: (String) -> Un
                 .fillMaxWidth()
                 .height(52.dp)
         ) {
-            items.forEachIndexed { index, item ->
+            topLevelRoutes.forEachIndexed { index, item ->
                 NavigationBarItem(
                     icon = {
                         Icon(
-                            selectedIcons[index],
-                            contentDescription = item,
+                            item.icon,
+                            contentDescription = item.name,
                         )
                     },
-                    selected = selectedItem == index,
-                    onClick = { selectedItem = index }
+                    selected = currentDestination?.route.orEmpty() == item.route,
+                    onClick = {
+                        selectedItem = index
+                        navHostController.navigate(item.route) {
+                            // Pop up to the start destination of the graph to
+                            // avoid building up a large stack of destinations
+                            // on the back stack as users select items
+                            popUpTo(navHostController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
+                            launchSingleTop = true
+                            // Restore state when reselecting a previously selected item
+                            restoreState = true
+                        }
+                    }
                 )
             }
         }
