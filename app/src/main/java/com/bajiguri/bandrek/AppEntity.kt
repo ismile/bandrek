@@ -37,6 +37,13 @@ data class Rom(
     val filename: String
 )
 
+@Entity(tableName = "settings")
+data class Setting(
+    @PrimaryKey(autoGenerate = false)
+    val key: String,
+    val value: String
+)
+
 @Dao
 interface AppDao {
 
@@ -65,4 +72,14 @@ interface AppDao {
 
     @Query("SELECT * from roms ORDER BY name ASC")
     fun getAllRom(): Flow<List<Rom>>
+
+    // keys
+    @Upsert
+    suspend fun upsertSetting(data: Setting)
+
+    @Query("SELECT * from settings ORDER BY `key` ASC")
+    fun getAllSetting(): Flow<List<Setting>>
+
+    @Query("SELECT * from settings WHERE `key` = :key")
+    fun getSettingByKey(key: String): Flow<Setting>
 }
