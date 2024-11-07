@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.SettingScreen
+package com.bajiguri.bandrek.screen.SettingScreen
 
 import android.app.Activity
 import android.content.Intent
@@ -18,10 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bajiguri.bandrek.PlatformScreen.PlatformViewModel
+import com.bajiguri.bandrek.screen.PlatformScreen.PlatformViewModel
 import com.bajiguri.bandrek.Setting
-
-const val ROM_DIRECTORY = "ROM_DIRECTORY";
 
 @Composable
 @Preview(showBackground = true)
@@ -37,7 +35,7 @@ fun SettingScreen(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.updateSetting(Setting(ROM_DIRECTORY, result.data?.data.toString()))
+            viewModel.updateSetting(Setting(ROM_DIRECTORY, result.data?.data?.path.orEmpty().replace("/tree/primary:", "")))
         }
     }
 
@@ -51,7 +49,10 @@ fun SettingScreen(
             }
         )
         ListItem(
-            headlineContent = { Text(text = "Scan") },
+            headlineContent = { Text(text = "Scan")},
+            modifier = Modifier.clickable {
+                viewModel.scan()
+            }
         )
     }
 }

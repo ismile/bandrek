@@ -11,11 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.bajiguri.bandrek.AppScreen.AppScreen
-import com.bajiguri.bandrek.HomeScreen.HomeScreen
-import com.bajiguri.bandrek.HomeScreen.view.NavigationView
-import com.bajiguri.bandrek.PlatformScreen.PlatformScreen
-import com.bajiguri.bandrek.SettingScreen.SettingScreen
+import com.bajiguri.bandrek.screen.AppScreen.AppScreen
+import com.bajiguri.bandrek.screen.HomeScreen.HomeScreen
+import com.bajiguri.bandrek.screen.HomeScreen.view.NavigationView
+import com.bajiguri.bandrek.screen.PlatformScreen.PlatformScreen
+import com.bajiguri.bandrek.screen.RomScreen.RomScreen
+import com.bajiguri.bandrek.screen.SettingScreen.SettingScreen
 
 @Composable
 fun Navigation() {
@@ -36,10 +37,18 @@ fun Navigation() {
                 AppScreen(modifier = Modifier.padding(padding), searchText = searchText)
             }
             composable("platform_screen") {
-                PlatformScreen()
+                PlatformScreen(onItemClick = {
+                    navController.navigate("rom_screen/$it")
+                })
             }
             composable("setting_screen") {
                 SettingScreen()
+            }
+            composable("rom_screen/{platformCode}") { navBackStackEntry ->
+                val platformCode = navBackStackEntry.arguments?.getString("platformCode")
+                platformCode?.let {
+                    RomScreen(platformCode = it)
+                }
             }
         }
 

@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.HomeScreen
+package com.bajiguri.bandrek.screen.HomeScreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

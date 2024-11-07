@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.AppScreen
+package com.bajiguri.bandrek.screen.AppScreen
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable

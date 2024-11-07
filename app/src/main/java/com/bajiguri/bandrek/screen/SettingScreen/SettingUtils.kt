@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.SettingScreen
+package com.bajiguri.bandrek.screen.SettingScreen
 
 import android.content.Intent
 import androidx.core.app.ActivityCompat

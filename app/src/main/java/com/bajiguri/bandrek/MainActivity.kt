@@ -36,7 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.bajiguri.bandrek.AppScreen.AppScreen
+import com.bajiguri.bandrek.screen.AppScreen.AppScreen
 import com.example.compose.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
-                        .imePadding()
                 ) {
                     Navigation()
                 }

@@ -1,16 +1,18 @@
-package com.bajiguri.bandrek.SettingScreen
+package com.bajiguri.bandrek.screen.SettingScreen
 
-import androidx.activity.result.launch
+import android.R.attr.path
+import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bajiguri.bandrek.AppDao
 import com.bajiguri.bandrek.Setting
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
+
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
@@ -24,6 +26,21 @@ class SettingViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
+    fun updateSetting(setting: Setting) {
+        viewModelScope.launch {
+            settingRepository.upsertSetting(setting)
+        }
+    }
+
+    fun scan() {
+        viewModelScope.launch {
+            val path = settingList.value.find { x -> x.key == ROM_DIRECTORY }
+            val directories = settingRepository.getDirectories(path?.value.orEmpty())
+            settingRepository.savePlatform(directories)
+        }
+
+    }
+
 //    private val _settingList = MutableStateFlow<List<Setting>>(emptyList())
 //    val settingList: StateFlow<List<Setting>> = _settingList.asStateFlow()
 
@@ -34,13 +51,6 @@ class SettingViewModel @Inject constructor(
 //            }
 //        }
 //    }
-
-    fun updateSetting(setting: Setting) {
-        viewModelScope.launch {
-            settingRepository.upsertSetting(setting)
-        }
-//        refreshSettings()
-    }
 
 //    init {
 //        viewModelScope.launch {

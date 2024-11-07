@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.HomeScreen.view
+package com.bajiguri.bandrek.screen.HomeScreen.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.bajiguri.bandrek.AppScreen.view.AppSearchView
+import com.bajiguri.bandrek.screen.AppScreen.view.AppSearchView
 import com.bajiguri.bandrek.icon.Component
 import com.bajiguri.bandrek.icon.Gamepad2
 import com.bajiguri.bandrek.icon.House

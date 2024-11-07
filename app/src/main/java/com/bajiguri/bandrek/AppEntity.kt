@@ -18,8 +18,8 @@ data class Platform(
     val code: String,
     val name: String,
     val fileExtension: String,
-    val activityName: String,
-    val appArgument: String
+    val activityName: String?,
+    val appArgument: String?
 )
 
 @Entity(tableName = "roms")

@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.AppScreen
+package com.bajiguri.bandrek.screen.AppScreen
 
 import androidx.activity.result.launch
 import androidx.lifecycle.ViewModel

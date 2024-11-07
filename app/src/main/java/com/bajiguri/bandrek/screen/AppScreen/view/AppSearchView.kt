@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.AppScreen.view
+package com.bajiguri.bandrek.screen.AppScreen.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bajiguri.bandrek.AppScreen.AppInfo
+import com.bajiguri.bandrek.screen.AppScreen.AppInfo
 import com.bajiguri.bandrek.R
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay

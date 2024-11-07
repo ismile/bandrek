@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.AppScreen
+package com.bajiguri.bandrek.screen.AppScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bajiguri.bandrek.AppScreen.view.AppIconView
-import com.bajiguri.bandrek.AppScreen.view.AppSearchView
+import com.bajiguri.bandrek.screen.AppScreen.view.AppIconView
+import com.bajiguri.bandrek.screen.AppScreen.view.AppSearchView
 
 @Composable
 fun AppScreen(
