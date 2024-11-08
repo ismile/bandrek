@@ -73,6 +73,9 @@ interface AppDao {
     @Query("SELECT * from roms ORDER BY name ASC")
     fun getAllRom(): Flow<List<Rom>>
 
+    @Query("SELECT * from roms where platformCode = :platformCode ORDER BY name ASC")
+    fun getAllRomByPlatformCode(platformCode: String): Flow<List<Rom>>
+
     // keys
     @Upsert
     suspend fun upsertSetting(data: Setting)

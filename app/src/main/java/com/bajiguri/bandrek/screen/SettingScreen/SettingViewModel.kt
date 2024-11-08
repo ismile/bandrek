@@ -2,6 +2,8 @@ package com.bajiguri.bandrek.screen.SettingScreen
 
 import android.R.attr.path
 import android.os.Environment
+import androidx.compose.ui.text.toLowerCase
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bajiguri.bandrek.Setting
@@ -32,11 +34,23 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun scan() {
+    fun scan(root: DocumentFile) {
         viewModelScope.launch {
-            val path = settingList.value.find { x -> x.key == ROM_DIRECTORY }
-            val directories = settingRepository.getDirectories(path?.value.orEmpty())
-            settingRepository.savePlatform(directories)
+            val platformDir = root.listFiles()
+                .filter { it.isDirectory }
+            val platforms = settingRepository.savePlatform(platformDir)
+
+            platforms.forEach { x ->
+                val roms = x.first.listFiles()
+                    .filter {
+                        it.isFile && x.second.fileExtension.split(",").contains(
+                            it.name?.substring(it.name.orEmpty().lastIndexOf(".").plus(1))
+                                ?.lowercase()
+                        )
+                    }
+                settingRepository.saveRom(roms, x.second.code
+                )
+            }
         }
 
     }
