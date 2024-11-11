@@ -1,6 +1,10 @@
 package com.bajiguri.bandrek.utils
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import com.bajiguri.bandrek.Platform
+import com.bajiguri.bandrek.Rom
 
 val PSX_PLATFORM = Platform(
     code = "psx",
@@ -57,3 +61,12 @@ val SWITCH_PLATFORM = Platform(
     appArgument = null,
     activityName = null
 )
+
+fun launchDuckStation(rom: Rom, context: Context) {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.component = ComponentName("com.github.stenzek.duckstation", "com.github.stenzek.duckstation.EmulationActivity")
+    intent.putExtra("bootPath", rom.locationUri)
+    intent.putExtra("resumeState", 0)
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    context.startActivity(intent)
+}

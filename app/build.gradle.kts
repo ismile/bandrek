@@ -79,7 +79,9 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
 
-    implementation("androidx.documentfile:documentfile:1.0.1")
+    implementation(libs.documentfile)
+    implementation(libs.storage)
+
     kapt("androidx.room:room-compiler:2.6.1")
     kapt(libs.hilt.android.compiler)
 
