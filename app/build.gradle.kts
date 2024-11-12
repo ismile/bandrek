@@ -13,6 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.bajiguri.bandrek"
         minSdk = 29
+        //noinspection ExpiredTargetSdkVersion
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -82,7 +83,8 @@ dependencies {
     implementation(libs.documentfile)
     implementation(libs.storage)
 
-    kapt("androidx.room:room-compiler:2.6.1")
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.androidx.room.compiler)
     kapt(libs.hilt.android.compiler)
 
 }

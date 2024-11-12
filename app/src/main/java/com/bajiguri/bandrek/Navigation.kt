@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.anggrayudi.storage.SimpleStorageHelper
 import com.bajiguri.bandrek.screen.AppScreen.AppScreen
 import com.bajiguri.bandrek.screen.HomeScreen.HomeScreen
 import com.bajiguri.bandrek.screen.HomeScreen.view.NavigationView
@@ -19,7 +20,9 @@ import com.bajiguri.bandrek.screen.RomScreen.RomScreen
 import com.bajiguri.bandrek.screen.SettingScreen.SettingScreen
 
 @Composable
-fun Navigation() {
+fun Navigation(
+    storageHelper: SimpleStorageHelper
+) {
     var searchText by remember { mutableStateOf("") }
     val navController = rememberNavController()
 
@@ -42,7 +45,7 @@ fun Navigation() {
                 })
             }
             composable("setting_screen") {
-                SettingScreen()
+                SettingScreen(storageHelper= storageHelper)
             }
             composable("rom_screen/{platformCode}") { navBackStackEntry ->
                 val platformCode = navBackStackEntry.arguments?.getString("platformCode")

@@ -6,8 +6,16 @@ import android.content.Intent
 import com.bajiguri.bandrek.Platform
 import com.bajiguri.bandrek.Rom
 
+val PSX_CODE = "psx";
+val GBA_CODE = "gba";
+val NDS_CODE = "nds";
+val N3DS_CODE = "3ds";
+val PSP_CODE = "psp";
+val PS2_CODE = "ps2";
+val SWITCH_CODE = "switch";
+
 val PSX_PLATFORM = Platform(
-    code = "psx",
+    code = PSX_CODE,
     name = "Sony Playstation",
     fileExtension = "iso,chd,bin",
     appArgument = null,
@@ -15,7 +23,7 @@ val PSX_PLATFORM = Platform(
 )
 
 val GBA_PLATFORM = Platform(
-    code = "gba",
+    code = GBA_CODE,
     name = "Game boy Advanced",
     fileExtension = "gba,zip",
     appArgument = null,
@@ -23,7 +31,7 @@ val GBA_PLATFORM = Platform(
 )
 
 val NDS_PLATFORM = Platform(
-    code = "nds",
+    code = NDS_CODE,
     name = "Nintendo DS",
     fileExtension = "nds,zip",
     appArgument = null,
@@ -31,7 +39,7 @@ val NDS_PLATFORM = Platform(
 )
 
 val N3DS_PLATFORM = Platform(
-    code = "3ds",
+    code = N3DS_CODE,
     name = "Nintendo 3DS",
     fileExtension = "3ds,cxi",
     appArgument = null,
@@ -39,7 +47,7 @@ val N3DS_PLATFORM = Platform(
 )
 
 val PSP_PLATFORM = Platform(
-    code = "psp",
+    code = PSP_CODE,
     name = "Playstation Portable",
     fileExtension = "chd,iso",
     appArgument = null,
@@ -47,7 +55,7 @@ val PSP_PLATFORM = Platform(
 )
 
 val PS2_PLATFORM = Platform(
-    code = "ps2",
+    code = PS2_CODE,
     name = "Playstation 2",
     fileExtension = "chd,iso",
     appArgument = null,
@@ -55,18 +63,11 @@ val PS2_PLATFORM = Platform(
 )
 
 val SWITCH_PLATFORM = Platform(
-    code = "switch",
+    code = SWITCH_CODE,
     name = "Nintendo Switch",
     fileExtension = "nsp,xci",
     appArgument = null,
     activityName = null
 )
 
-fun launchDuckStation(rom: Rom, context: Context) {
-    val intent = Intent(Intent.ACTION_VIEW)
-    intent.component = ComponentName("com.github.stenzek.duckstation", "com.github.stenzek.duckstation.EmulationActivity")
-    intent.putExtra("bootPath", rom.locationUri)
-    intent.putExtra("resumeState", 0)
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-    context.startActivity(intent)
-}
+val platformMap = mapOf(PSX_CODE to PSX_PLATFORM, GBA_CODE to GBA_PLATFORM, NDS_CODE to NDS_PLATFORM, N3DS_CODE to N3DS_PLATFORM, PSP_CODE to PSP_PLATFORM, PS2_CODE to PS2_PLATFORM, SWITCH_CODE to SWITCH_PLATFORM)
