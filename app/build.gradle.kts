@@ -1,10 +1,18 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.compose")
+    kotlin("plugin.serialization")
 //    id("com.google.devtools.ksp")
 }
+val apikeyPropertiesFile = rootProject.file("app.properties")
+val apikeyProperties = Properties()
+    apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 
 android {
     namespace = "com.bajiguri.bandrek"
@@ -22,6 +30,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "IDDB_CLIENT_ID", apikeyProperties["IDDB_CLIENT_ID"].toString())
+        buildConfigField("String", "IDDB_CLIENT_SECRET", apikeyProperties["IDDB_CLIENT_SECRET"].toString())
+
     }
 
     buildTypes {
@@ -42,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -82,6 +95,15 @@ dependencies {
 
     implementation(libs.documentfile)
     implementation(libs.storage)
+
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.ktor.ktor.client.android)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
 
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)

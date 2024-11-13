@@ -85,4 +85,7 @@ interface AppDao {
 
     @Query("SELECT * from settings WHERE `key` = :key")
     fun getSettingByKey(key: String): Flow<Setting>
+
+    @Query("SELECT value FROM settings WHERE `key` = :key")
+    suspend fun getSettingValueByKey(key: String): String?
 }

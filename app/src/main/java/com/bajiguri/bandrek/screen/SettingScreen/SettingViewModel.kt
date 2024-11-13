@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bajiguri.bandrek.Platform
 import com.bajiguri.bandrek.Setting
+import com.bajiguri.bandrek.external.iddb.IddbClient
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -15,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val settingRepository: SettingRepository
+    private val settingRepository: SettingRepository,
+    private val iddbClient: IddbClient
 ) : ViewModel() {
 
     val settingList: StateFlow<List<Setting>> = settingRepository.getAllSetting()
@@ -47,6 +51,11 @@ class SettingViewModel @Inject constructor(
 
         }
 
+    }
+
+    suspend fun greeting(): String {
+        val response = iddbClient.searchRomByName("Digimon")
+        return "asd"
     }
 
 //    private val _settingList = MutableStateFlow<List<Setting>>(emptyList())

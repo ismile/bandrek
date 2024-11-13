@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.documentfile.provider.DocumentFile
@@ -19,6 +20,7 @@ import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.getAbsolutePath
 import com.bajiguri.bandrek.Setting
 import com.bajiguri.bandrek.utils.platformMap
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingScreen(
@@ -26,6 +28,7 @@ fun SettingScreen(
     storageHelper: SimpleStorageHelper
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val settings by viewModel.settingList.collectAsState();
     val settingMap = remember(settings) {
         settings.associateBy { it.key }
@@ -49,6 +52,9 @@ fun SettingScreen(
         ListItem(
             headlineContent = { Text(text = "cek") },
             modifier = Modifier.clickable {
+                scope.launch {
+                    viewModel.greeting()
+                }
                 DocumentFileCompat.getAccessibleAbsolutePaths(context)
             }
         )
