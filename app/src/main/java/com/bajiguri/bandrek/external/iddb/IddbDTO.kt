@@ -17,68 +17,68 @@ data class TokenResponse(
 
 @Serializable
 data class Game(
-    val id: Int,
+    val id: Int = 0,
     val artworks: List<Artwork>? = null,
-    val category: Int,
-    val cover: Cover,
+    val category: Int = 0,
+    val cover: Cover = Cover(),
     val firstReleaseDate: Long? = null,
-    val genres: List<Genre>,
-    val name: String,
-    val platforms: List<Platform>,
-    val rating: Double,
-    val summary: String?
+    val genres: List<Genre> = emptyList(),
+    val name: String = "",
+    val platforms: List<Platform> = emptyList(),
+    val rating: Double = 0.0,
+    val summary: String? = null
 )
 
 @Serializable
 data class Artwork(
-    val id: Int,
+    val id: Int = 0,
     val alphaChannel: Boolean? = null,
-    val animated: Boolean,
-    val game: Int,
-    val height: Int,
+    val animated: Boolean = false,
+    val game: Int = 0,
+    val height: Int = 0,
     val imageId: String? = null,
-    val url: String,
-    val width: Int,
-    val checksum: String
+    val url: String = "",
+    val width: Int = 0,
+    val checksum: String = ""
 )
 
 @Serializable
 data class Cover(
-    val id: Int,
+    val id: Int = 0,
     val alphaChannel: Boolean? = null,
-    val animated: Boolean,
-    val game: Int,
-    val height: Int,
+    val animated: Boolean = false,
+    val game: Int = 0,
+    val height: Int = 0,
     val imageId: String? = null,
-    val url: String,
-    val width: Int,
-    val checksum: String
+    val url: String = "",
+    val width: Int = 0,
+    val checksum: String = ""
 )
 
 @Serializable
 data class Genre(
-    val id: Int,
+    val id: Int = 0,
     val createdAt: Long? = null,
-    val name: String,
-    val slug: String,
+    val name: String = "",
+    val slug: String = "",
     val updatedAt: Long? = null,
-    val url: String,
-    val checksum: String
+    val url: String = "",
+    val checksum: String = ""
 )
 
 @Serializable
 data class Platform(
-    val id: Int,
-    val abbreviation: String,
+    val id: Int = 0,
+    val abbreviation: String = "",
     val alternativeName: String? = null,
-    val category: Int,
+    val category: Int = 0,
     val createdAt: Long? = null,
-    val name: String,
+    val name: String = "",
     val platformLogo: Int? = null,
-    val slug: String,
+    val slug: String = "",
     val updatedAt: Long? = null,
-    val url: String,
-    val versions: List<Int>,
-    val websites: List<Int>,
-    val checksum: String
+    val url: String = "",
+    val versions: List<Int> = emptyList(),
+    val websites: List<Int> = emptyList(),
+    val checksum: String = ""
 )

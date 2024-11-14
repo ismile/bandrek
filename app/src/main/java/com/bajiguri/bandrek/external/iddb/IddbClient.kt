@@ -55,9 +55,9 @@ class IddbClient @Inject constructor(
         }
     }
 
-    suspend fun searchRomByName(name: String): List<Game> {
+    suspend fun searchRomByName(name: String, platformCode: String): List<Game> {
         val token = token()
-
+        val code = if (platformCode == "psx") "ps" else platformCode
         val response: List<Game> = httpClient.post("https://api.igdb.com/v4/games") {
             headers {
                 append(HttpHeaders.Accept, "application/json")
@@ -65,7 +65,7 @@ class IddbClient @Inject constructor(
                 append("Client-ID", IDDB_CLIENT_ID)
                 append(HttpHeaders.ContentType, "text/plain")
             }
-            setBody("search \"$name\"; fields name,artworks.*,category,cover.*,genres.*,rating,summary,first_release_date,platforms.*;where platforms.slug = \"switch\";limit 5;")
+            setBody("search \"$name\"; fields name,artworks.*,category,cover.*,genres.*,rating,summary,first_release_date,platforms.*;where platforms.slug = \"$code\";limit 5;")
         }.body()
 
         return response

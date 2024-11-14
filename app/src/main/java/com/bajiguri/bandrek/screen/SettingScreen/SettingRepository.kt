@@ -23,6 +23,10 @@ class SettingRepository @Inject constructor(
         appDao.upsertPlatform(data)
     }
 
+    suspend fun getAllRomByPlatformCodeDirect(platformCode: String): List<Rom> {
+        return appDao.getAllRomByPlatformCodeDirect(platformCode)
+    }
+
     suspend fun saveRom(files: List<DocumentFile>, platformCode: String) {
         files.forEach {
             appDao.upsertRom(
@@ -35,9 +39,13 @@ class SettingRepository @Inject constructor(
                     genres = "",
                     locationUri = it.uri.toString(),
                     location = it.uri.path.toString(),
-                    filename = it.name.orEmpty()
+                    filename = it.name.orEmpty(),
                 )
             )
         }
+    }
+
+    suspend fun upsertRom(rom: Rom) {
+        appDao.upsertRom(rom)
     }
 }

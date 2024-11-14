@@ -53,25 +53,25 @@ class SettingViewModel @Inject constructor(
 
     }
 
-    suspend fun greeting(): String {
-        val response = iddbClient.searchRomByName("Digimon")
-        return "asd"
+    suspend fun scan(platform: Platform, updateProgres: (Float) -> Unit) {
+        val rom = settingRepository.getAllRomByPlatformCodeDirect(platform.code)
+        val total = rom.size
+
+        rom.forEachIndexed { i, it ->
+            val response = iddbClient.searchRomByName(it.name.substringBefore(".").substringBefore("(").replace("_", " "), platform.code)
+            if(response.isNotEmpty()) {
+                val first = response.first()
+                val d = it.copy(
+                    name = first.name,
+                    description = first.summary.orEmpty(),
+                    genres = first.genres.joinToString(","),
+                    rating = first.rating,
+                    coverUrl = "https:"+first.cover.url.replace("t_thumb", "t_cover_big"),
+                    artworkUrl = "https:"+first.artworks?.first()?.url?.replace("t_thumb", "t_1080p"),
+                )
+                settingRepository.upsertRom(d)
+            }
+            updateProgres((i+1).toFloat()/total)
+        }
     }
-
-//    private val _settingList = MutableStateFlow<List<Setting>>(emptyList())
-//    val settingList: StateFlow<List<Setting>> = _settingList.asStateFlow()
-
-//    fun refreshSettings() {
-//        viewModelScope.launch {
-//            settingRepository.getAllSetting().collect { settings ->
-//                _settingList.value = settings
-//            }
-//        }
-//    }
-
-//    init {
-//        viewModelScope.launch {
-//            _settingList.value = settingRepository.getAllSetting().first()
-//        }
-//    }
 }

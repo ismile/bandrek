@@ -34,7 +34,13 @@ data class Rom(
 
     val locationUri: String,
     val location: String,
-    val filename: String
+    val filename: String,
+
+    val coverUrl: String? = null,
+    val artworkUrl: String? = null,
+    val rating: Double = 0.0
+
+
 )
 
 @Entity(tableName = "settings")
@@ -75,6 +81,9 @@ interface AppDao {
 
     @Query("SELECT * from roms where platformCode = :platformCode ORDER BY name ASC")
     fun getAllRomByPlatformCode(platformCode: String): Flow<List<Rom>>
+
+    @Query("SELECT * from roms where platformCode = :platformCode ORDER BY name ASC")
+    suspend fun getAllRomByPlatformCodeDirect(platformCode: String): List<Rom>
 
     // keys
     @Upsert

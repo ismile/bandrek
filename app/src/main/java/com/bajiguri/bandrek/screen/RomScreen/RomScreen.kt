@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -26,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.bajiguri.bandrek.Rom
 import com.bajiguri.bandrek.utils.playerMap
@@ -36,7 +39,7 @@ fun RomScreen(platformCode: String, viewModel: RomViewModel = hiltViewModel()) {
     val romList by viewModel.getRomList(platformCode).collectAsState()
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 150.dp),
+        columns = GridCells.Adaptive(minSize = 160.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         items(romList) {
@@ -54,18 +57,22 @@ fun RomItem(rom: Rom) {
         modifier = Modifier
             .padding(10.dp)
             .clickable {
-                if(playerMap.containsKey(rom.platformCode)) {
-                    playerMap[rom.platformCode]?.values?.first()?.let { it(rom, context) }
+                if (playerMap.containsKey(rom.platformCode)) {
+                    playerMap[rom.platformCode]?.values
+                        ?.first()
+                        ?.let { it(rom, context) }
                 }
             }
     ) {
         AsyncImage(
-            model = DocumentFileCompat.fromUri(context, Uri.parse(rom.locationUri+".jpg"))!!.uri,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(rom.coverUrl)
+                .crossfade(true)
+                .build(),
             contentDescription = "",
             modifier = Modifier
-                .width(100.dp)
-                .aspectRatio(335f / 300f)
-                .clip(RoundedCornerShape(6.dp)),
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp)),
             contentScale = ContentScale.Crop,
         )
 

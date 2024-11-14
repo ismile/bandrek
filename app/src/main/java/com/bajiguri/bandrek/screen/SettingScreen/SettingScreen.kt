@@ -3,25 +3,38 @@ package com.bajiguri.bandrek.screen.SettingScreen
 import android.provider.DocumentsContract
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.documentfile.provider.DocumentFile
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.getAbsolutePath
+import com.bajiguri.bandrek.Platform
 import com.bajiguri.bandrek.Setting
+import com.bajiguri.bandrek.screen.SettingScreen.View.PlatformSheetView
+import com.bajiguri.bandrek.utils.PSX_PLATFORM
 import com.bajiguri.bandrek.utils.platformMap
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
@@ -34,43 +47,35 @@ fun SettingScreen(
         settings.associateBy { it.key }
     }
 
-//    val showBottomSheet by remember { mutableStateOf(false) }
-//    val sheetState = rememberModalBottomSheetState(
-//        skipPartiallyExpanded = false,
-//    )
-
-    LaunchedEffect(true) {
-        storageHelper.onStorageAccessGranted = { requestCode, root ->
-            viewModel.updateSetting(Setting(root.name+"_dir", root.getAbsolutePath(context)))
-            val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-                root.uri,
-                DocumentsContract.getTreeDocumentId(root.uri)
-            )
-            val tree = DocumentFile.fromTreeUri(context, childrenUri)
-            if(platformMap.containsKey(root.name.orEmpty().lowercase())) {
-                viewModel.scan(tree!!, platformMap[root.name]!!)
-            }
-        }
-    }
+    var showPlatformSheet by remember { mutableStateOf(false) }
+    var selectedPlatform by remember { mutableStateOf(PSX_PLATFORM) }
 
     Column {
-        ListItem(
-            headlineContent = { Text(text = "cek") },
-            modifier = Modifier.clickable {
-                scope.launch {
-                    viewModel.greeting()
-                }
-                DocumentFileCompat.getAccessibleAbsolutePaths(context)
-            }
+        Text(
+            "Platform Settings",
+            modifier = Modifier.padding(16.dp)
         )
+        HorizontalDivider()
         platformMap.map {
             ListItem(
                 headlineContent = { Text(text = it.value.name) },
-                supportingContent = { Text(text = settingMap[it.value.code+"_dir"]?.value.orEmpty()) },
+//                supportingContent = { Text(text = settingMap[it.value.code + "_dir"]?.value.orEmpty()) },
                 modifier = Modifier.clickable {
-                    storageHelper.requestStorageAccess()
+                    scope.launch {
+                        selectedPlatform = it.value
+                        showPlatformSheet = true
+                    }
+//                    storageHelper.requestStorageAccess()
                 }
             )
         }
     }
+
+    PlatformSheetView(
+        show = showPlatformSheet,
+        platform = selectedPlatform,
+        settingMap = settingMap,
+        storageHelper = storageHelper,
+        onDismissRequest = { showPlatformSheet = false }
+    )
 }
