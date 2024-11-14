@@ -1,18 +1,18 @@
 import java.io.FileInputStream
 import java.util.Properties
 
+val apikeyPropertiesFile = rootProject.file("app.properties")
+val apikeyProperties = Properties()
+apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
     kotlin("plugin.serialization")
-//    id("com.google.devtools.ksp")
 }
-val apikeyPropertiesFile = rootProject.file("app.properties")
-val apikeyProperties = Properties()
-    apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 
 android {
     namespace = "com.bajiguri.bandrek"
@@ -21,7 +21,6 @@ android {
     defaultConfig {
         applicationId = "com.bajiguri.bandrek"
         minSdk = 29
-        //noinspection ExpiredTargetSdkVersion
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -46,18 +45,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
@@ -106,11 +102,7 @@ dependencies {
 
 
     //noinspection KaptUsageInsteadOfKsp
-    kapt(libs.androidx.room.compiler)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.androidx.room.compiler)
+    ksp(libs.hilt.android.compiler)
 
-}
-
-kapt {
-    correctErrorTypes = true
 }

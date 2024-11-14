@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.components.icon
+package com.bajiguri.bandrek.ui.icon
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType

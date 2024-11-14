@@ -21,10 +21,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.bajiguri.bandrek.screen.AppScreen.view.AppSearchView
-import com.bajiguri.bandrek.components.icon.Component
-import com.bajiguri.bandrek.components.icon.Gamepad2
-import com.bajiguri.bandrek.components.icon.House
-import com.bajiguri.bandrek.components.icon.Settings
+import com.bajiguri.bandrek.ui.icon.Component
+import com.bajiguri.bandrek.ui.icon.Gamepad2
+import com.bajiguri.bandrek.ui.icon.House
+import com.bajiguri.bandrek.ui.icon.Settings
 
 data class TopLevelRoute(val name: String, val route: String, val icon: ImageVector)
 val topLevelRoutes = listOf(

@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -87,11 +88,7 @@ fun AppSearchView(
                     )
                 }
             },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor= Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                containerColor=MaterialTheme.colorScheme.surfaceContainer,
-            ),
+            colors = OutlinedTextFieldDefaults.colors(),
             shape = RoundedCornerShape(30.dp),
             placeholder = {
                 Text(stringResource(R.string.search))
