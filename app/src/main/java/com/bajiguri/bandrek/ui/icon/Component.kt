@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-public val Component: ImageVector
+val Component: ImageVector
     get() {
         if (_Component != null) {
             return _Component!!

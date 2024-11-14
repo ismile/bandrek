@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -30,7 +29,7 @@ fun SettingScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val settings by viewModel.settingList.collectAsState();
+    val settings by viewModel.settingList.collectAsState()
     val settingMap = remember(settings) {
         settings.associateBy { it.key }
     }
