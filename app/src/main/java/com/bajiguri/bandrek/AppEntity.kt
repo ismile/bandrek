@@ -25,20 +25,23 @@ data class Platform(
 @Entity(tableName = "roms")
 data class Rom(
     @PrimaryKey(autoGenerate = false)
-    val code: String,
-    val platformCode: String,
-    val name: String,
-    val description: String,
-    val category: String,
-    val genres: String,
+    val code: String = "",
+    val platformCode: String = "",
+    val name: String = "",
+    val description: String = "",
+    val category: String = "",
+    val genres: String = "",
 
-    val locationUri: String,
-    val location: String,
-    val filename: String,
+    val locationUri: String = "",
+    val location: String = "",
+    val filename: String = "",
 
     val coverUrl: String? = null,
     val artworkUrl: String? = null,
-    val rating: Double = 0.0
+    val rating: Double = 0.0,
+
+    val lastPlayed: Long = 0L,
+    val favorite: Boolean = false,
 
 
 )

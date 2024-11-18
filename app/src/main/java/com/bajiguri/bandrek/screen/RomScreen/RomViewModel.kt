@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.bajiguri.bandrek.AppDao
 import com.bajiguri.bandrek.Rom
 import com.bajiguri.bandrek.Setting
+import com.bajiguri.bandrek.external.iddb.Game
+import com.bajiguri.bandrek.external.iddb.IddbClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RomViewModel @Inject constructor(
-    private val romRepository: RomRepository
+    private val romRepository: RomRepository,
+    private val iddbClient: IddbClient,
+    private val appDao: AppDao
 ) : ViewModel() {
 
     fun getRomList(platformCode: String): StateFlow<List<Rom>> {
@@ -28,6 +32,14 @@ class RomViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = emptyList()
             )
+    }
+
+    suspend fun searchByName(name: String, platformCode: String): List<Game> {
+        return iddbClient.searchRomByName(name, platformCode)
+    }
+
+    suspend fun upsertRom(rom: Rom) {
+        appDao.upsertRom(rom)
     }
 
 }

@@ -1,7 +1,9 @@
 package com.bajiguri.bandrek.screen.RomScreen
 
 import android.net.Uri
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -17,6 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,38 +37,63 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.bajiguri.bandrek.Rom
+import com.bajiguri.bandrek.screen.RomScreen.View.RomScannerSheetView
+import com.bajiguri.bandrek.screen.RomScreen.View.RomSheetView
+import com.bajiguri.bandrek.utils.PSX_PLATFORM
 import com.bajiguri.bandrek.utils.playerMap
+import kotlinx.coroutines.launch
 
 @Composable
 fun RomScreen(platformCode: String, viewModel: RomViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val romList by viewModel.getRomList(platformCode).collectAsState()
+    var showRomSheet by remember { mutableStateOf(false) }
+    var showRomScannerSheet by remember { mutableStateOf(false) }
+    var selectedRom by remember { mutableStateOf(Rom()) }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         items(romList) {
-            RomItem(it)
+            RomItem(it, onLongClick = {
+                selectedRom = it
+                showRomSheet = true
+            })
         }
     }
+    RomSheetView(showRomSheet, selectedRom, onDismissRequest = { showRomSheet = false }, onScanClick = {
+        showRomSheet = false
+        showRomScannerSheet = true
+    })
+    RomScannerSheetView(showRomScannerSheet, selectedRom, onDismissRequest = { showRomScannerSheet = false })
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun RomItem(rom: Rom) {
+fun RomItem(rom: Rom, onLongClick: () -> Unit) {
     var context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(10.dp)
-            .clickable {
-                if (playerMap.containsKey(rom.platformCode)) {
-                    playerMap[rom.platformCode]?.values
-                        ?.first()
-                        ?.let { it(rom, context) }
+            .combinedClickable(
+                onClick = {
+                    if (playerMap.containsKey(rom.platformCode)) {
+                        playerMap[rom.platformCode]?.values
+                            ?.first()
+                            ?.let { it(rom, context) }
+                    }
+                },
+                onLongClick = {
+                    scope.launch {
+                        onLongClick()
+                    }
                 }
-            }
+            )
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
