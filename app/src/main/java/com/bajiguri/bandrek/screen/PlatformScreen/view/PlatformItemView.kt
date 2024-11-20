@@ -23,12 +23,20 @@ import coil3.request.ImageRequest
 import com.bajiguri.bandrek.Platform
 import com.bajiguri.bandrek.R
 import com.bajiguri.bandrek.screen.AppScreen.view.iconWidth
+import com.bajiguri.bandrek.utils.ANDROID_CODE
+import com.bajiguri.bandrek.utils.GBA_CODE
 import com.bajiguri.bandrek.utils.GBA_PLATFORM
+import com.bajiguri.bandrek.utils.N3DS_CODE
 import com.bajiguri.bandrek.utils.N3DS_PLATFORM
+import com.bajiguri.bandrek.utils.NDS_CODE
 import com.bajiguri.bandrek.utils.NDS_PLATFORM
+import com.bajiguri.bandrek.utils.PS2_CODE
 import com.bajiguri.bandrek.utils.PS2_PLATFORM
+import com.bajiguri.bandrek.utils.PSP_CODE
 import com.bajiguri.bandrek.utils.PSP_PLATFORM
+import com.bajiguri.bandrek.utils.PSX_CODE
 import com.bajiguri.bandrek.utils.PSX_PLATFORM
+import com.bajiguri.bandrek.utils.SWITCH_CODE
 import kotlin.math.absoluteValue
 
 @Composable
@@ -70,28 +78,36 @@ fun PlatformItemView(pagerState: PagerState, page: Int, platform: Platform, onIt
 fun PlatformItemImageView(platform: Platform) {
     val painter = remember(platform.code) {
         when (platform.code) {
-            "psx" -> {
+            PSX_CODE -> {
                 R.drawable.portrait_psx
             }
 
-            "gba" -> {
+            GBA_CODE -> {
                 R.drawable.portrait_gba
             }
 
-            "nds" -> {
+            NDS_CODE -> {
                 R.drawable.portrait_ds
             }
 
-            "3ds" -> {
+            N3DS_CODE -> {
                 R.drawable.portrait_3ds
             }
 
-            "psp" -> {
+            PSP_CODE -> {
                 R.drawable.portrait_psp
             }
 
-            "ps2" -> {
+            PS2_CODE -> {
                 R.drawable.portrait_ps2
+            }
+
+            SWITCH_CODE -> {
+                R.drawable.portrait_switch
+            }
+
+            ANDROID_CODE -> {
+                R.drawable.portrait_android
             }
 
             else -> R.drawable.ic_launcher_background

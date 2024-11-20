@@ -20,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bajiguri.bandrek.Rom
 import com.bajiguri.bandrek.screen.AppScreen.view.AppIconView
 import com.bajiguri.bandrek.screen.AppScreen.view.AppSearchView
+import com.bajiguri.bandrek.screen.AppScreen.view.AppSheetView
 
 @Composable
 fun AppScreen(
@@ -30,6 +32,9 @@ fun AppScreen(
     searchText: String
 ) {
     val appList by viewModel.appList.collectAsState()
+    var showAppSheet by remember { mutableStateOf(false) }
+    var selectedApp by remember { mutableStateOf(AppInfo()) }
+
     Column(
         modifier
             .fillMaxSize()
@@ -41,8 +46,9 @@ fun AppScreen(
             items(appList.filter {
                 it.name.orEmpty().contains(searchText, ignoreCase = true)
             }, key = { it.name.orEmpty() + "_" + it.activityName + "_" + it.packageName }) {
-                AppIconView(it = it)
+                AppIconView(it = it, onLongClick = { showAppSheet = true; selectedApp = it })
             }
         }
+        AppSheetView(showAppSheet, selectedApp, onDismissRequest = { showAppSheet = false })
     }
 }

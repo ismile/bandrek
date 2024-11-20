@@ -1,10 +1,6 @@
 package com.bajiguri.bandrek.utils
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
 import com.bajiguri.bandrek.Platform
-import com.bajiguri.bandrek.Rom
 
 val PSX_CODE = "psx";
 val GBA_CODE = "gba";
@@ -13,6 +9,7 @@ val N3DS_CODE = "3ds";
 val PSP_CODE = "psp";
 val PS2_CODE = "ps2";
 val SWITCH_CODE = "switch";
+val ANDROID_CODE = "android"
 
 val PSX_PLATFORM = Platform(
     code = PSX_CODE,
@@ -66,6 +63,14 @@ val SWITCH_PLATFORM = Platform(
     code = SWITCH_CODE,
     name = "Nintendo Switch",
     fileExtension = "nsp,xci",
+    appArgument = null,
+    activityName = null
+)
+
+val ANDROID_PLATFORM = Platform(
+    code = ANDROID_CODE,
+    name = "ANDROID",
+    fileExtension = "apk",
     appArgument = null,
     activityName = null
 )

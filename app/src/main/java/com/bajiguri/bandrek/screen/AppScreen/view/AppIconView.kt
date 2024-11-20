@@ -1,7 +1,9 @@
 package com.bajiguri.bandrek.screen.AppScreen.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -10,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,26 +25,36 @@ import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import com.bajiguri.bandrek.screen.AppScreen.AppInfo
 import com.bajiguri.bandrek.screen.AppScreen.startApp
+import kotlinx.coroutines.launch
 
 val iconWidth = 60.dp
 val iconContainerWidth = iconWidth + 10.dp
 val iconContainerHeight = iconWidth + 40.dp
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AppIconView(
     modifier: Modifier = Modifier,
     it: AppInfo,
-    showText: Boolean = true
+    showText: Boolean = true,
+    onLongClick: () -> Unit
 ) {
     var context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier
             .size(iconContainerWidth, iconContainerHeight)
             .padding(4.dp)
-            .clickable(){
-                startApp(context, it)
-            },
+            .combinedClickable(onClick = {
+                scope.launch {
+                    startApp(context, it)
+                }
+            }, onLongClick = {
+                scope.launch {
+                    onLongClick()
+                }
+            }),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(

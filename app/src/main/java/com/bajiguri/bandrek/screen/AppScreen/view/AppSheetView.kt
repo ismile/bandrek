@@ -1,4 +1,4 @@
-package com.bajiguri.bandrek.screen.RomScreen.View
+package com.bajiguri.bandrek.screen.AppScreen.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,62 +26,36 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bajiguri.bandrek.Rom
+import com.bajiguri.bandrek.screen.AppScreen.AppInfo
+import com.bajiguri.bandrek.screen.AppScreen.AppViewModel
 import com.bajiguri.bandrek.screen.RomScreen.RomViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RomSheetView(
-    viewModel: RomViewModel = hiltViewModel()
+fun AppSheetView(
+    show: Boolean,
+    app: AppInfo,
+    onDismissRequest: () -> Unit,
+    viewModel: AppViewModel = hiltViewModel()
 ) {
-    val show by viewModel.showRomSheet.collectAsState()
-    val rom by viewModel.selectedRom.collectAsState()
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
     )
     val scope = rememberCoroutineScope()
-    var loading by remember { mutableStateOf(false) }
-    var percentage by remember { mutableFloatStateOf(0f) }
-    var romName by remember { mutableStateOf(rom.name) }
-
-    val context = LocalContext.current
-
-    LaunchedEffect(rom.code) {
-        romName = rom.name
-    }
 
     if (show) {
         ModalBottomSheet(
             modifier = Modifier.fillMaxHeight(),
             sheetState = sheetState,
-            onDismissRequest = {
-                viewModel.toggleRomSheet(false)
-            }
+            onDismissRequest = onDismissRequest
         ) {
             Column {
-                Text(
-                    rom.name,
-                    modifier = Modifier.padding(16.dp)
-                )
-                if (loading) {
-                    LinearProgressIndicator(
-                        progress = { percentage },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                } else {
-                    HorizontalDivider()
-                }
-
                 ListItem(
-                    headlineContent = { Text(text = "ID") },
-                    supportingContent = { Text(text = rom.code ) }
-                )
-                ListItem(
-                    headlineContent = { Text(text = "Re-Scan") },
+                    headlineContent = { Text(text = "Add to Game Library") },
                     modifier = Modifier.clickable {
                         scope.launch {
-                            viewModel.toggleScannerSheet(true)
-                            viewModel.toggleRomSheet(false)
+                            viewModel.addToGameLibrary(app)
                         }
                     }
                 )

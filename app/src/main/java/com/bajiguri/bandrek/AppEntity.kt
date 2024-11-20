@@ -43,7 +43,19 @@ data class Rom(
     val lastPlayed: Long = 0L,
     val favorite: Boolean = false,
 
+    val packageName: String? = null,
+    val activityName: String? = null,
 
+)
+
+@Entity(tableName = "app_favorites")
+data class AppFavorite(
+    @PrimaryKey(autoGenerate = false)
+    val code: String,
+    val name: String,
+    val activityName: String?,
+    val packageName: String?,
+    val orderId: Int
 )
 
 @Entity(tableName = "settings")
@@ -100,4 +112,14 @@ interface AppDao {
 
     @Query("SELECT value FROM settings WHERE `key` = :key")
     suspend fun getSettingValueByKey(key: String): String?
+
+    // app fovorites
+    @Upsert
+    suspend fun upsertApp(data: AppFavorite)
+
+    @Query("SELECT * from app_favorites ORDER BY `name` ASC")
+    fun getAllAppFavorites(): Flow<List<AppFavorite>>
+
+    @Delete
+    suspend fun deleteAppFavorite(data: AppFavorite)
 }

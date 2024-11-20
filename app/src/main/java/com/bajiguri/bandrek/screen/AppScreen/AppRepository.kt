@@ -5,10 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import com.bajiguri.bandrek.AppDao
+import com.bajiguri.bandrek.Rom
+import com.bajiguri.bandrek.utils.ANDROID_PLATFORM
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class AppRepository @Inject constructor() {
+class AppRepository @Inject constructor(
+    private val appDao: AppDao
+) {
     @Inject
     @ApplicationContext
     lateinit var context: Context
@@ -28,5 +33,13 @@ class AppRepository @Inject constructor() {
             )
 
         }
+    }
+
+    suspend fun addAndroidPlatform() {
+        appDao.upsertPlatform(ANDROID_PLATFORM)
+    }
+
+    suspend fun upsertRom(rom: Rom) {
+        appDao.upsertRom(rom)
     }
 }

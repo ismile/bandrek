@@ -3,6 +3,8 @@ package com.bajiguri.bandrek.screen.AppScreen
 import androidx.activity.result.launch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bajiguri.bandrek.Rom
+import com.bajiguri.bandrek.utils.ANDROID_PLATFORM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +25,22 @@ class AppViewModel @Inject constructor(
         }
     }
 
+    suspend fun addToGameLibrary(app: AppInfo) {
+        repository.upsertRom(Rom(
+            code = app.name+"_"+app.packageName,
+            platformCode = ANDROID_PLATFORM.code,
+            name = app.name.orEmpty(),
+            description = "",
+            category = "",
+            packageName = app.packageName,
+            activityName = app.activityName
+        ))
+    }
+
     init {
         loadApps()
+        viewModelScope.launch {
+            repository.addAndroidPlatform()
+        }
     }
 }
