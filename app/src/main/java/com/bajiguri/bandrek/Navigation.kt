@@ -12,12 +12,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.anggrayudi.storage.SimpleStorageHelper
-import com.bajiguri.bandrek.screen.AppScreen.AppScreen
-import com.bajiguri.bandrek.screen.HomeScreen.HomeScreen
-import com.bajiguri.bandrek.screen.HomeScreen.view.NavigationView
-import com.bajiguri.bandrek.screen.PlatformScreen.PlatformScreen
-import com.bajiguri.bandrek.screen.RomScreen.RomScreen
-import com.bajiguri.bandrek.screen.SettingScreen.SettingScreen
+import com.bajiguri.bandrek.screen.appScreen.AppScreen
+import com.bajiguri.bandrek.screen.homeScreen.HomeScreen
+import com.bajiguri.bandrek.screen.homeScreen.view.NavigationView
+import com.bajiguri.bandrek.screen.platformScreen.PlatformScreen
+import com.bajiguri.bandrek.screen.romScreen.RomScreen
+import com.bajiguri.bandrek.screen.settingScreen.SettingScreen
 
 @Composable
 fun Navigation(
