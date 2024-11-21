@@ -6,6 +6,7 @@ import com.bajiguri.bandrek.AppDao
 import com.bajiguri.bandrek.Rom
 import com.bajiguri.bandrek.external.iddb.Game
 import com.bajiguri.bandrek.external.iddb.IddbClient
+import com.bajiguri.bandrek.utils.ANDROID_PLATFORM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,6 +21,9 @@ class RomViewModel @Inject constructor(
     private val iddbClient: IddbClient,
     private val appDao: AppDao
 ) : ViewModel() {
+
+    private val _selectedPlatform = MutableStateFlow<String>(ANDROID_PLATFORM.code)
+    val selectedPlatform: StateFlow<String> = _selectedPlatform.asStateFlow()
 
     private val _selectedRom = MutableStateFlow<Rom>(Rom())
     val selectedRom: StateFlow<Rom> = _selectedRom.asStateFlow()
@@ -49,6 +53,10 @@ class RomViewModel @Inject constructor(
 
     fun setSelectedRom(rom: Rom) {
         _selectedRom.value = rom
+    }
+
+    fun setSelectedPlatform(platform: String) {
+        _selectedPlatform.value = platform
     }
 
     suspend fun searchByName(name: String, platformCode: String): List<Game> {

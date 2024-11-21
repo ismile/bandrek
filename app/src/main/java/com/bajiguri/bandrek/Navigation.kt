@@ -16,6 +16,7 @@ import com.bajiguri.bandrek.screen.appScreen.AppScreen
 import com.bajiguri.bandrek.screen.homeScreen.HomeScreen
 import com.bajiguri.bandrek.screen.homeScreen.view.NavigationView
 import com.bajiguri.bandrek.screen.platformScreen.PlatformScreen
+import com.bajiguri.bandrek.screen.romScreen.PlatformAndRomScreen
 import com.bajiguri.bandrek.screen.romScreen.RomScreen
 import com.bajiguri.bandrek.screen.settingScreen.SettingScreen
 
@@ -40,9 +41,10 @@ fun Navigation(
                 AppScreen(modifier = Modifier.padding(padding), searchText = searchText)
             }
             composable("platform_screen") {
-                PlatformScreen(onItemClick = {
-                    navController.navigate("rom_screen/$it")
-                })
+                PlatformAndRomScreen(modifier = Modifier.padding(padding))
+//                PlatformScreen(onItemClick = {
+//                    navController.navigate("rom_screen/$it")
+//                })
             }
             composable("setting_screen") {
                 SettingScreen(storageHelper= storageHelper)

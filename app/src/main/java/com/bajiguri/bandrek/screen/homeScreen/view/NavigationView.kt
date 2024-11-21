@@ -27,13 +27,13 @@ import com.bajiguri.bandrek.ui.icon.Gamepad2
 import com.bajiguri.bandrek.ui.icon.House
 import com.bajiguri.bandrek.ui.icon.Settings
 
-data class TopLevelRoute(val name: String, val route: String, val icon: ImageVector)
+data class TopLevelRoute(val name: String, val route: List<String>, val icon: ImageVector)
 
 val topLevelRoutes = listOf(
-    TopLevelRoute("Home", "home_screen", House),
-    TopLevelRoute("Platform", "platform_screen", Gamepad2),
-    TopLevelRoute("App", "app_screen", Component),
-    TopLevelRoute("Setting", "setting_screen", Settings)
+    TopLevelRoute("Home", listOf("home_screen"), House),
+    TopLevelRoute("Platform", listOf("platform_screen", "rom_screen"), Gamepad2),
+    TopLevelRoute("App", listOf("app_screen"), Component),
+    TopLevelRoute("Setting", listOf("setting_screen"), Settings)
 )
 
 @Composable
@@ -70,10 +70,12 @@ fun NavigationView(
                             contentDescription = item.name,
                         )
                     },
-                    selected = currentDestination?.route.orEmpty() == item.route,
+                    selected = item.route.filter {
+                        currentDestination?.route.orEmpty().contains(it)
+                    }.isNotEmpty(),
                     onClick = {
                         selectedItem = index
-                        navHostController.navigate(item.route) {
+                        navHostController.navigate(item.route[0]) {
                             // Pop up to the start destination of the graph to
                             // avoid building up a large stack of destinations
                             // on the back stack as users select items
