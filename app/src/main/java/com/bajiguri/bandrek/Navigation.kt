@@ -1,6 +1,8 @@
 package com.bajiguri.bandrek
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +21,7 @@ import com.bajiguri.bandrek.screen.platformScreen.PlatformScreen
 import com.bajiguri.bandrek.screen.romScreen.PlatformAndRomScreen
 import com.bajiguri.bandrek.screen.romScreen.RomScreen
 import com.bajiguri.bandrek.screen.settingScreen.SettingScreen
+import com.bajiguri.bandrek.theme.AppTheme
 
 @Composable
 fun Navigation(
@@ -31,8 +34,9 @@ fun Navigation(
         NavigationView(
             searchText,
             onSearchTextChange = { searchText = it },
-            navController)
-    }) { padding ->
+            navController
+        )
+    }, containerColor = MaterialTheme.colorScheme.surface) { padding ->
         NavHost(navController, startDestination = "app_screen", Modifier.padding(padding)) {
             composable("home_screen") {
                 HomeScreen()
@@ -41,13 +45,14 @@ fun Navigation(
                 AppScreen(modifier = Modifier.padding(padding), searchText = searchText)
             }
             composable("platform_screen") {
-                PlatformAndRomScreen(modifier = Modifier.padding(padding))
+//                PlatformAndRomScreen(modifier = Modifier.padding(padding))
 //                PlatformScreen(onItemClick = {
 //                    navController.navigate("rom_screen/$it")
 //                })
+                RomScreen(platformCode = "android")
             }
             composable("setting_screen") {
-                SettingScreen(storageHelper= storageHelper)
+                SettingScreen(storageHelper = storageHelper)
             }
             composable("rom_screen/{platformCode}") { navBackStackEntry ->
                 val platformCode = navBackStackEntry.arguments?.getString("platformCode")

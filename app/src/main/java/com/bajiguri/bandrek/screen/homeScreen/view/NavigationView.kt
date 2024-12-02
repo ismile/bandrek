@@ -51,11 +51,11 @@ fun NavigationView(
         modifier = Modifier
 //            .padding(10.dp)
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
 //        AppSearchView(value = searchedText, onValueChange = onSearchTextChange)
         NavigationBar(
-            containerColor = MaterialTheme.colorScheme.secondary,
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
             windowInsets = WindowInsets(0, 0, 0, 40),
             modifier = Modifier
                 .width(280.dp)

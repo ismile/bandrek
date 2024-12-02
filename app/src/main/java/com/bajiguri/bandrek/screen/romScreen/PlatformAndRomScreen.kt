@@ -7,6 +7,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -21,6 +24,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,8 +34,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,20 +80,70 @@ fun PlatformAndRomScreen(modifier: Modifier = Modifier, viewModel: RomViewModel 
         contentDescription = "",
         modifier = Modifier
             .fillMaxWidth()
-            .alpha(0.3f),
+            .fillMaxHeight(0.8f)
+            .alpha(0.4f)
+            .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+            .drawWithContent {
+                val colors = listOf(
+                    Color.Black,
+                    Color.Transparent
+                )
+                drawContent()
+                drawRect(
+                    brush = Brush.verticalGradient(colors),
+                    blendMode = BlendMode.DstIn
+                )
+            },
         contentScale = ContentScale.Crop,
     )
     Column {
         Column(
             modifier = Modifier.weight(1f),
-        ) {  }
-        HorizontalPager(state = pagerState, pageSize = PageSize.Fixed(120.dp)) { page ->
-            RomItemDetail(romList[page],
-                onLongClick = {
-                    viewModel.setSelectedRom(romList[page])
-                    viewModel.toggleRomSheet(true)
-                })
+        ) { }
+        Row {
+            Column {
+                Text(
+                    text = selectedRom.name,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Text(
+                    text = selectedRom.description,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Row {
+                    selectedRom.genres.split(",").map {
+                        SuggestionChip(
+                            onClick = { },
+                            label = { Text(it) }
+                        )
+                    }
+                }
+            }
+
         }
+        LazyHorizontalGrid(
+            state = gridState,
+            rows = GridCells.FixedSize(140.dp),
+            modifier = Modifier.height(288.dp)
+        ) {
+            items(romList, key = { rom -> rom.code }) {
+                RomItemDetail(rom = it,
+                    onLongClick = {
+                        viewModel.setSelectedRom(it)
+                        viewModel.toggleRomSheet(true)
+                    })
+            }
+        }
+//        HorizontalPager(state = pagerState, pageSize = PageSize.Fixed(120.dp)) { page ->
+//            RomItemDetail(romList[page],
+//                onLongClick = {
+//                    viewModel.setSelectedRom(romList[page])
+//                    viewModel.toggleRomSheet(true)
+//                })
+//        }
     }
     RomSheetView()
     RomScannerSheetView()
@@ -94,28 +155,35 @@ fun RomItemDetail(rom: Rom, onLongClick: () -> Unit, viewModel: RomViewModel = h
     val selectedRom by viewModel.selectedRom.collectAsState()
     var context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val borderWidth by animateDpAsState(if (selectedRom.code == rom.code) 4.dp else 0.dp, label = "border")
+    val borderWidth by animateDpAsState(
+        if (selectedRom.code == rom.code) 4.dp else 0.dp,
+        label = "border"
+    )
 
 
     Column(
-        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth()
+            .fillMaxHeight()
+            .width(140.dp)
             .clip(MaterialTheme.shapes.medium)
             .combinedClickable(onClick = {
                 scope.launch {
                     if (selectedRom.code == rom.code) {
-                        if(rom.platformCode == ANDROID_PLATFORM.code) {
-                            startApp(context, AppInfo(
-                                name = rom.name,
-                                packageName = rom.packageName.orEmpty(),
-                                activityName = rom.activityName.orEmpty()
-                            ))
+                        if (rom.platformCode == ANDROID_PLATFORM.code) {
+                            startApp(
+                                context, AppInfo(
+                                    name = rom.name,
+                                    packageName = rom.packageName.orEmpty(),
+                                    activityName = rom.activityName.orEmpty()
+                                )
+                            )
                         } else {
                             if (playerMap.containsKey(rom.platformCode)) {
-                                playerMap[rom.platformCode]?.values?.first()?.let { x -> x(rom, context) }
+                                playerMap[rom.platformCode]?.values
+                                    ?.first()
+                                    ?.let { x -> x(rom, context) }
                             }
                         }
                     }
@@ -129,8 +197,7 @@ fun RomItemDetail(rom: Rom, onLongClick: () -> Unit, viewModel: RomViewModel = h
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(rom.coverUrl).
-                crossfade(true)
+                .data(rom.coverUrl).crossfade(true)
                 .build(),
             contentDescription = "",
             modifier = Modifier
@@ -139,8 +206,8 @@ fun RomItemDetail(rom: Rom, onLongClick: () -> Unit, viewModel: RomViewModel = h
                     MaterialTheme.colorScheme.secondary,
                     MaterialTheme.shapes.medium
                 )
-                .fillMaxWidth()
-                .height(120.dp)
+                .fillMaxHeight()
+                .width(120.dp)
                 .clip(MaterialTheme.shapes.medium),
             contentScale = ContentScale.Crop,
         )

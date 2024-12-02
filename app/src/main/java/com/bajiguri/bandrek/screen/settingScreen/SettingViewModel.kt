@@ -62,7 +62,7 @@ class SettingViewModel @Inject constructor(
                 val d = it.copy(
                     name = first.name,
                     description = first.summary.orEmpty(),
-                    genres = first.genres.joinToString(","),
+                    genres = first.genres.map { it.name }.joinToString(","),
                     rating = first.rating,
                     coverUrl = "https:"+first.cover.url.replace("t_thumb", "t_cover_big"),
                     artworkUrl = "https:"+first.artworks?.first()?.url?.replace("t_thumb", "t_1080p"),

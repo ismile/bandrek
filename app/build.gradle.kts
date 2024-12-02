@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
 
+    implementation(libs.androidx.ui.text.google.fonts)
 
     //noinspection KaptUsageInsteadOfKsp
     ksp(libs.androidx.room.compiler)

@@ -1,11 +1,14 @@
 package com.bajiguri.bandrek.screen.settingScreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -38,7 +41,10 @@ fun SettingScreen(
     var showPlatformSheet by remember { mutableStateOf(false) }
     var selectedPlatform by remember { mutableStateOf(PSX_PLATFORM) }
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Text(
             "Platform Settings",
             modifier = Modifier.padding(16.dp)

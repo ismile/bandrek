@@ -99,7 +99,7 @@ fun RomScannerSheetView(
                                 viewModel.upsertRom(rom.copy(
                                     name = it.name,
                                     description = it.summary.orEmpty(),
-                                    genres = it.genres.joinToString(","),
+                                    genres = it.genres.map { d -> d.name }.joinToString(","),
                                     rating = it.rating,
                                     coverUrl = "https:"+it.cover.url.replace("t_thumb", "t_cover_big"),
                                     artworkUrl = "https:"+it.artworks?.first()?.url?.replace("t_thumb", "t_1080p"),

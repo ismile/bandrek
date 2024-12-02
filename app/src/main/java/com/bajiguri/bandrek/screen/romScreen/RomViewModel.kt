@@ -3,6 +3,7 @@ package com.bajiguri.bandrek.screen.romScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bajiguri.bandrek.AppDao
+import com.bajiguri.bandrek.Platform
 import com.bajiguri.bandrek.Rom
 import com.bajiguri.bandrek.external.iddb.Game
 import com.bajiguri.bandrek.external.iddb.IddbClient
@@ -33,6 +34,13 @@ class RomViewModel @Inject constructor(
 
     private val _showRomScannerSheet = MutableStateFlow(false)
     val showRomScannerSheet = _showRomScannerSheet.asStateFlow()
+
+    val platformList: StateFlow<List<Platform>> = romRepository.getAllPlatform()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000), // Optional: Stop collecting after 5 seconds of inactivity
+            initialValue = emptyList()
+        )
 
     fun getRomList(platformCode: String): StateFlow<List<Rom>> {
         return romRepository.getAllRom(platformCode)
