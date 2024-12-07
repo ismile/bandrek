@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun RomItemView(rom: Rom, onLongClick: () -> Unit, viewModel: RomViewModel = hiltViewModel()) {
+fun RomItemView(modifier: Modifier = Modifier, rom: Rom, onLongClick: () -> Unit, viewModel: RomViewModel = hiltViewModel()) {
     val selectedRom by viewModel.selectedRom.collectAsState()
     var context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -50,9 +50,8 @@ fun RomItemView(rom: Rom, onLongClick: () -> Unit, viewModel: RomViewModel = hil
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.medium)
-            .fillMaxWidth()
             .background(bgColor)
             .combinedClickable(onClick = {
                 scope.launch {
